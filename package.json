@@ -1,0 +1,30 @@
+{
+  "name": "seo-webrender",
+  "version": "1.0.0",
+  "description": "SEO friendly wen page render",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yupkey/seo-webrender.git"
+  },
+  "keywords": [
+    "seo",
+    "webrender",
+    "js friendly",
+    "render",
+    "ajax"
+  ],
+  "author": "yupk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yupkey/seo-webrender/issues"
+  },
+  "homepage": "https://github.com/yupkey/seo-webrender#readme",
+  "dependencies": {
+    "phantom": "^0.8.4",
+    "phantomjs": "^1.9.19"
+  }
+}
