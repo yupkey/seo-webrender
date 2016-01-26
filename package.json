@@ -1,14 +1,16 @@
 {
   "name": "seo-webrender",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SEO friendly web page render - webrender save the webpage as static HTML, which you can return it to the crawlers!",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "server": "node ./lib/server.js",
     "test": "./node_modules/.bin/mocha"
   },
   "files": [
-    "bin"
+    "bin",
+    "lib"
   ],
   "bin": {
     "webrender": "./bin/webrender",
@@ -32,6 +34,7 @@
   },
   "homepage": "https://github.com/yupkey/seo-webrender#readme",
   "dependencies": {
+    "express": "^4.13.4",
     "phantom": "^0.8.4",
     "phantomjs": "^1.9.19"
   },
