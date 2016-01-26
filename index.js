@@ -34,6 +34,11 @@
     data.source = data.source.replace(/src="\//g, 'src="' + data.location.origin + '/');
     return data;
   }
+
+  function checkUrl (url) {
+    return /(http:\/)?(\/[\w\.\-]+)+\/?/.test(url);
+  }
+
   /**
    * @class WebRender
    */
@@ -44,14 +49,26 @@
    * @param {string} url - url to website (http://www.foxnews.com)
    * @param {function} callback
    */
-  WebRender.prototype.get = function (url, callback) {
+  WebRender.prototype.get = function (url, callback, error) {
     var path = __dirname + '/node_modules/phantomjs/bin/';
     callback = callback || function () {};
+    error = error || function () {};
+    if (!checkUrl(url)) {
+      error('Wrong url!');
+      console.error('Wrong url!');
+      return;
+    }
 
     phantom.create({path: path}, function (ph) {
       ph.createPage(function (page) {
         page.open(url, function (status) {
-          console.log("opened " + url, status);
+          if (status === 'fail') {
+            error('Fail to get data!');
+            console.error('Fail to get data!');
+            ph.exit();
+            return;
+          }
+          console.log('opened ' + url, status);
           page.evaluate(function () {
             return {
               source: document.getElementsByTagName('html')[0].innerHTML,
@@ -66,6 +83,7 @@
             };
           }, function (data) {
             data = parseData(data);
+            console.log(data);
             callback(data);
             ph.exit();
           });
@@ -80,6 +98,10 @@
    * @param {string} [fileName] - File name of saved page
    */
   WebRender.prototype.save = function (url, fileName) {
+    if (!checkUrl(url)) {
+      console.error('Wrong url!');
+      return;
+    }
     this.get(url, function (data) {
       fileName = fileName || data.location.host.replace(/\./g, '-') + data.location.pathname.replace(/\//g, '-') + '.html';
       fs.writeFile(fileName, data.source, 'utf8', function (err) {
