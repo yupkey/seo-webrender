@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var webrender = require('../index');
+var method = process.argv[2];
+var args = process.argv.slice(3);
+
+if (webrender[method] && typeof webrender[method] === 'function') {
+    webrender[method](args[0], args[1]);
+} else {
+    webrender.help();
+}

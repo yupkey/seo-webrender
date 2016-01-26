@@ -24,18 +24,49 @@
   var fs = require('fs');
   var phantom = require('phantom');
 
-  var SeoWebRender = function () {};
+  function parseData (data) {
+    data.source = data.source.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    data.source = data.source.replace(/href="\.\//g, 'href="' + data.location.origin + '/');
+    data.source = data.source.replace(/href="\/\//g, 'href="' + data.location.protocol);
+    data.source = data.source.replace(/href="\//g, 'href="' + data.location.origin + '/');
+    data.source = data.source.replace(/src="\.\//g, 'src="' + data.location.origin + '/');
+    data.source = data.source.replace(/src="\/\//g, 'src="' + data.location.protocol);
+    data.source = data.source.replace(/src="\//g, 'src="' + data.location.origin + '/');
+    return data;
+  }
+  /**
+   * @class WebRender
+   */
+  var WebRender = function () {};
 
-  SeoWebRender.prototype.getSource = function (url, callback) {
-    phantom.create(function (ph) {
+  /**
+   * @function getSource
+   * @param {string} url - url to website (http://www.foxnews.com)
+   * @param {function} callback
+   */
+  WebRender.prototype.get = function (url, callback) {
+    var path = __dirname + '/node_modules/phantomjs/bin/';
+    callback = callback || function () {};
+
+    phantom.create({path: path}, function (ph) {
       ph.createPage(function (page) {
         page.open(url, function (status) {
           console.log("opened " + url, status);
           page.evaluate(function () {
-            return document.getElementsByTagName('html')[0].innerHTML;
-          }, function (result) {
-            result = result.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-            callback(result);
+            return {
+              source: document.getElementsByTagName('html')[0].innerHTML,
+              title: document.title,
+              location: {
+                href: location.href,
+                host: location.host,
+                protocol: location.protocol,
+                pathname: location.pathname,
+                origin: location.origin
+              }
+            };
+          }, function (data) {
+            data = parseData(data);
+            callback(data);
             ph.exit();
           });
         });
@@ -43,10 +74,15 @@
     });
   };
 
-  SeoWebRender.prototype.savePage = function (url) {
-    this.getSource(url, function (source) {
-      var fileName = 'seo-webrender-tmp.html';
-      fs.writeFile(fileName, source, 'utf8', function (err) {
+  /**
+   * @function save
+   * @param {string} url - url to website (http://www.foxnews.com)
+   * @param {string} [fileName] - File name of saved page
+   */
+  WebRender.prototype.save = function (url, fileName) {
+    this.get(url, function (data) {
+      fileName = fileName || data.location.host.replace(/\./g, '-') + data.location.pathname.replace(/\//g, '-') + '.html';
+      fs.writeFile(fileName, data.source, 'utf8', function (err) {
         if (err) {
           console.error(err);
           return;
@@ -57,12 +93,17 @@
   };
 
   /**
-   * SeoWebRender instance exported as a module
-   * @module seo-webrender
-   * @type SeoWebRender
+   * @function help
    */
-  var webrender = new SeoWebRender();
-//  webrender.savePage('http://www.bbc.com/');
+  WebRender.prototype.help = function () {
+    console.log('Usage: \twebrender save url\n');
+    console.log('Example: webrender save http://www.foxnews.com');
+  };
 
-  module.exports = webrender;
+  /**
+   * WebRender instance exported as a module
+   * @module seo-webrender
+   * @type WebRender
+   */
+  module.exports = new WebRender();
 })();

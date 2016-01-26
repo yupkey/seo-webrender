@@ -1,10 +1,17 @@
 {
   "name": "seo-webrender",
   "version": "1.0.0",
-  "description": "SEO friendly wen page render",
+  "description": "SEO friendly web page render - webrender save the webpage as static HTML, which you can return it to the crawlers!",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "webrender": "./bin/webrender",
+    "seo-webrender": "./bin/webrender"
   },
   "repository": {
     "type": "git",
