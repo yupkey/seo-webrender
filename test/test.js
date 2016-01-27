@@ -1,4 +1,4 @@
-var webrender = require('../index');
+var webrender = require('../lib/app');
 
 describe('webrender', function () {
   describe('#get()', function () {

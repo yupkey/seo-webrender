@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var webrender = require('../index');
+var webrender = require('../lib/app');
 var method = process.argv[2];
 var args = process.argv.slice(3);
 

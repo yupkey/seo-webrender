@@ -1,11 +1,10 @@
 {
   "name": "seo-webrender",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SEO friendly web page render - webrender save the webpage as static HTML, which you can return it to the crawlers!",
-  "main": "index.js",
+  "main": "./lib/app",
   "scripts": {
-    "start": "node index.js",
-    "server": "node ./lib/server.js",
+    "start": "node ./lib/app",
     "test": "./node_modules/.bin/mocha"
   },
   "files": [
