@@ -1,6 +1,6 @@
 {
   "name": "seo-webrender",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SEO friendly web page render - webrender save the webpage as static HTML, which you can return it to the crawlers!",
   "main": "./lib/app",
   "scripts": {
