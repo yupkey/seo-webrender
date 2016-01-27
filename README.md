@@ -14,5 +14,6 @@ $ npm install seo-webrender -g
 
 ```javascript
 $ seo-webrender server //start running server http://localhost:3000/
-$ seo-webrender save http://www.foxnews.com //save page to www-foxnews-com-.html
+$ seo-webrender save http://www.foxnews.com //save webpage to www-foxnews-com-.html
+$ seo-webrender get http://www.foxnews.com //get webpage source
 ```
